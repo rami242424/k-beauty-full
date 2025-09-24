@@ -4,12 +4,24 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+
+app.use(
+  cors({
+    origin: [
+      "https://k-beauty-full.vercel.app", 
+      "http://localhost:5173",            
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
+
 const dbFile = path.join(process.cwd(), "db.json");
+
 
 if (!fs.existsSync(dbFile)) {
   fs.writeFileSync(
@@ -19,7 +31,9 @@ if (!fs.existsSync(dbFile)) {
 }
 
 const readDB = () => JSON.parse(fs.readFileSync(dbFile, "utf-8"));
-const writeDB = (data) => fs.writeFileSync(dbFile, JSON.stringify(data, null, 2));
+const writeDB = (data) =>
+  fs.writeFileSync(dbFile, JSON.stringify(data, null, 2));
+
 
 app.post("/signup", (req, res) => {
   const { email, name, password } = req.body;
@@ -44,7 +58,9 @@ app.post("/signup", (req, res) => {
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   const db = readDB();
-  const user = db.users.find((u) => u.email === email && u.password === password);
+  const user = db.users.find(
+    (u) => u.email === email && u.password === password
+  );
 
   if (!user) {
     return res.status(401).json({ message: "이메일/비밀번호를 확인하세요." });
@@ -62,6 +78,7 @@ app.get("/carts/:userId", (req, res) => {
   const db = readDB();
   res.json(db.carts[userId] || []);
 });
+
 
 app.post("/carts/:userId", (req, res) => {
   const { userId } = req.params;
