@@ -92,3 +92,15 @@ app.post("/carts/:userId", (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
 });
+
+
+app.get("/products", (req, res) => {
+  const db = readDB();
+  res.json(db.products || []);
+});
+
+
+app.get("/categories", (req, res) => {
+  const db = readDB();
+  res.json(db.categories || []);
+});

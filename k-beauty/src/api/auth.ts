@@ -9,7 +9,10 @@ export type LoginResponse = {
   user: User | null;
 };
 
-const API_BASE = "http://localhost:3001";
+const API_BASE =
+  import.meta.env.VITE_API_URL || "http://localhost:3001";
+  console.log("👉 API_BASE from env:", import.meta.env.VITE_API_URL);
+
 
 /* 로그인 */
 export async function loginApi(email: string, password: string): Promise<LoginResponse> {
