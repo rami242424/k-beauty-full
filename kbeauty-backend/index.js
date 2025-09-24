@@ -1,4 +1,3 @@
-// backend/index.js
 import express from "express";
 import cors from "cors";
 import fs from "fs";
@@ -7,14 +6,11 @@ import path from "path";
 const app = express();
 const PORT = 3001;
 
-// 미들웨어
 app.use(cors());
 app.use(express.json());
 
-// 데이터 저장소 (db.json 파일 사용)
 const dbFile = path.join(process.cwd(), "db.json");
 
-// db.json이 없으면 기본 구조 생성
 if (!fs.existsSync(dbFile)) {
   fs.writeFileSync(
     dbFile,
@@ -22,13 +18,9 @@ if (!fs.existsSync(dbFile)) {
   );
 }
 
-// db 읽기/쓰기 함수
 const readDB = () => JSON.parse(fs.readFileSync(dbFile, "utf-8"));
 const writeDB = (data) => fs.writeFileSync(dbFile, JSON.stringify(data, null, 2));
 
-/* -------------------------------
-   회원가입
--------------------------------- */
 app.post("/signup", (req, res) => {
   const { email, name, password } = req.body;
   if (!email || !name || !password) {
@@ -48,9 +40,7 @@ app.post("/signup", (req, res) => {
   res.json({ id: newUser.id, email: newUser.email, name: newUser.name });
 });
 
-/* -------------------------------
-   로그인
--------------------------------- */
+
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   const db = readDB();
@@ -66,9 +56,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-/* -------------------------------
-   장바구니 (유저별 저장)
--------------------------------- */
+
 app.get("/carts/:userId", (req, res) => {
   const { userId } = req.params;
   const db = readDB();
@@ -77,16 +65,13 @@ app.get("/carts/:userId", (req, res) => {
 
 app.post("/carts/:userId", (req, res) => {
   const { userId } = req.params;
-  const items = req.body; // 장바구니 배열 전체 저장
+  const items = req.body;
   const db = readDB();
   db.carts[userId] = items;
   writeDB(db);
   res.json({ message: "장바구니 저장 완료" });
 });
 
-/* -------------------------------
-   서버 시작
--------------------------------- */
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
 });
