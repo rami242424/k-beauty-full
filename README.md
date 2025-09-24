@@ -100,27 +100,9 @@ backend/                  # 백엔드 (Express)
 
 ---
 
-## ⚙️ 실행 방법
+### 🚀 배포 주소
 
-### 1. 프론트엔드 실행
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-➡ 접속: http://localhost:5173
-
-### 2. 백엔드 실행
-
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-➡ API 서버: http://localhost:3001
+프론트엔드(React + Vite) 배포: [https://k-beauty-full.vercel.app](https://k-beauty-full.vercel.app)
 
 ---
 

@@ -1,9 +1,11 @@
+import { API_BASE_URL } from "./config";
+
 export type Product = {
   id: number;
   title: string;
   price: number;
   rating: number;
-  category: string;  
+  category: string;
   thumbnail: string;
 };
 
@@ -17,40 +19,18 @@ async function fetchJSON<T>(url: string): Promise<T> {
 }
 
 export async function fetchBeautyCategories(): Promise<BeautyCategory[]> {
-  const data = await fetchJSON<any[]>("https://dummyjson.com/products/categories");
-  
-  return data.filter((c) => (BEAUTY_CATEGORIES as readonly string[]).includes(c)) as BeautyCategory[];
+  const data = await fetchJSON<any[]>(`${API_BASE_URL}/categories`);
+  return data.filter((c) =>
+    (BEAUTY_CATEGORIES as readonly string[]).includes(c)
+  ) as BeautyCategory[];
 }
 
 export async function fetchBeautyProducts(): Promise<Product[]> {
-  let all: Product[] = [];
-  for (const cat of BEAUTY_CATEGORIES) {
-    const data = await fetchJSON<{ products: any[] }>(
-      `https://dummyjson.com/products/category/${cat}`
-    );
-    const mapped = (data.products ?? []).map((p) => ({
-      id: p.id,
-      title: p.title,
-      price: p.price,
-      rating: p.rating,
-      category: p.category,     
-      thumbnail: p.thumbnail,
-    })) as Product[];
-    all = all.concat(mapped);
-  }
-  return all;
+  return await fetchJSON<Product[]>(`${API_BASE_URL}/products`);
 }
 
-export async function fetchBeautyProductsByCategory(cat: BeautyCategory): Promise<Product[]> {
-  const data = await fetchJSON<{ products: any[] }>(
-    `https://dummyjson.com/products/category/${cat}`
-  );
-  return (data.products ?? []).map((p) => ({
-    id: p.id,
-    title: p.title,
-    price: p.price,
-    rating: p.rating,
-    category: p.category,
-    thumbnail: p.thumbnail,
-  })) as Product[];
+export async function fetchBeautyProductsByCategory(
+  cat: BeautyCategory
+): Promise<Product[]> {
+  return await fetchJSON<Product[]>(`${API_BASE_URL}/products/category/${cat}`);
 }
