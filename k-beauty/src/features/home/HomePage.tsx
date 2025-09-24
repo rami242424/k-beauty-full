@@ -30,11 +30,17 @@ export default function HomePage() {
           fetchBeautyCategories(),
           fetchBeautyProducts(),
         ]);
+
+        console.log("👉 categories from API:", cats);
+        console.log("👉 products from API:", prods);
+
+
         if (!mounted) return;
         setCategories(cats);
         setProducts(prods);
       } catch (e) {
         console.error(e);
+          console.error("🚨 fetch error:", e);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -151,6 +157,8 @@ export default function HomePage() {
 function ProductCard({ p, compact }: { p: Product; compact?: boolean }) {
   const { t, lang } = useI18n();
   const addItem = useCartStore((s) => s.addItem);
+
+   console.log("🛍️ Rendering product:", p);
 
   return (
     <article className="card flex h-full flex-col p-3">
