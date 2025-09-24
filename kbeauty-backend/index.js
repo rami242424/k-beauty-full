@@ -104,3 +104,14 @@ app.get("/categories", (req, res) => {
   const db = readDB();
   res.json(db.categories || []);
 });
+
+
+// 카테고리별 상품 조회
+app.get("/products/category/:cat", (req, res) => {
+  const { cat } = req.params;
+  const db = readDB();
+  const filtered = (db.products || []).filter(
+    (p) => p.category === cat
+  );
+  res.json(filtered);
+});

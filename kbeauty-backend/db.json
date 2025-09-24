@@ -1,6 +1,23 @@
 {
   "users": [],
   "carts": {},
-  "products": [],
-  "categories": []
+  "products": [
+    {
+      "id": 1,
+      "title": "K-뷰티 세럼",
+      "price": 25,
+      "rating": 4.8,
+      "category": "skin-care",
+      "thumbnail": "https://placehold.co/200x200"
+    },
+    {
+      "id": 2,
+      "title": "프래그런스 향수",
+      "price": 55,
+      "rating": 4.6,
+      "category": "fragrances",
+      "thumbnail": "https://placehold.co/200x200"
+    }
+  ],
+  "categories": ["beauty", "skin-care", "fragrances"]
 }
