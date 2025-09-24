@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../api/config";
+import { PRODUCT_API_URL } from "../api/config";
 
 export type Product = {
   id: number;
@@ -21,15 +21,15 @@ async function fetchJSON<T>(url: string): Promise<T> {
 
 // ✅ 카테고리 불러오기
 export async function fetchBeautyCategories(): Promise<BeautyCategory[]> {
-  const data = await fetchJSON<string[]>(`${API_BASE_URL}/products/categories`);
+  const data = await fetchJSON<string[]>(`${PRODUCT_API_URL}/products/categories`);
   return data.filter((c) =>
     (BEAUTY_CATEGORIES as readonly string[]).includes(c)
   ) as BeautyCategory[];
 }
 
-// ✅ 전체 상품 불러오기 (dummyjson은 { products: [...] } 구조라 꺼내줘야 함)
+// ✅ 전체 상품 불러오기
 export async function fetchBeautyProducts(): Promise<Product[]> {
-  const data = await fetchJSON<{ products: Product[] }>(`${API_BASE_URL}/products`);
+  const data = await fetchJSON<{ products: Product[] }>(`${PRODUCT_API_URL}/products`);
   return data.products;
 }
 
@@ -38,7 +38,7 @@ export async function fetchBeautyProductsByCategory(
   cat: BeautyCategory
 ): Promise<Product[]> {
   const data = await fetchJSON<{ products: Product[] }>(
-    `${API_BASE_URL}/products/category/${cat}`
+    `${PRODUCT_API_URL}/products/category/${cat}`
   );
   return data.products;
 }
