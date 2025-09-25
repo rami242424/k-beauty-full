@@ -9,7 +9,6 @@ export type Product = {
   thumbnail: string;
 };
 
-// ✅ beauty, fragrances, skincare 3개만 필터링
 export const BEAUTY_CATEGORIES = ["beauty", "fragrances", "skincare"] as const;
 export type BeautyCategory = typeof BEAUTY_CATEGORIES[number];
 
@@ -19,7 +18,7 @@ async function fetchJSON<T>(url: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-// ✅ 카테고리 불러오기
+// ✅ 카테고리 목록 가져오기
 export async function fetchBeautyCategories(): Promise<BeautyCategory[]> {
   const data = await fetchJSON<string[]>(`${PRODUCT_API_URL}/products/categories`);
   return data.filter((c) =>
@@ -27,13 +26,15 @@ export async function fetchBeautyCategories(): Promise<BeautyCategory[]> {
   ) as BeautyCategory[];
 }
 
-// ✅ 전체 상품 불러오기
+// ✅ 전체 상품 (뷰티 전용으로 필터링)
 export async function fetchBeautyProducts(): Promise<Product[]> {
   const data = await fetchJSON<{ products: Product[] }>(`${PRODUCT_API_URL}/products`);
-  return data.products;
+  return data.products.filter((p) =>
+    (BEAUTY_CATEGORIES as readonly string[]).includes(p.category as BeautyCategory)
+  );
 }
 
-// ✅ 카테고리별 상품 불러오기
+// ✅ 카테고리별 상품 가져오기
 export async function fetchBeautyProductsByCategory(
   cat: BeautyCategory
 ): Promise<Product[]> {
